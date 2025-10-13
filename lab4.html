@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Adoption Application Form (Single Page)</title>
+    
+    <style>
+        body {
+            font-family: 'Verdana', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #006400;
+            text-align: center;
+            border-bottom: 3px solid #006400;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+
+        #adoptionForm {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #006400;
+            padding: 0 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .error-field {
+            border: 2px solid red !important;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        button {
+            background-color: #3cb371;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2e8b57;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <h1>Cat Adoption Application Form</h1>
+
+    <form id="adoptionForm" onsubmit="return validateForm()">
+
+        <fieldset>
+            <legend>Required Contact Information</legend>
+            
+            <label for="fullName">1. Full Name (JS Validated):</label>
+            <input type="text" id="fullName" name="fullName">
+            <span id="fullNameError" class="error-message"></span>
+
+            <label for="phone">2. Phone Number (JS Validated - 10 Digits):</label>
+            <input type="tel" id="phone" name="phone">
+            <span id="phoneError" class="error-message"></span>
+            
+            <label for="petCount">3. Number of Current Pets (JS Validated - Min 0):</label>
+            <input type="number" id="petCount" name="petCount">
+            <span id="petCountError" class="error-message"></span>
+
+            <label for="homeType">4. Type of Home (JS Validated - Selection Required):</label>
+            <select id="homeType" name="homeType">
+                <option value="">-- Select One --</option>
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="condo">Condo/Townhouse</option>
+                <option value="other">Other</option>
+            </select>
+            <span id="homeTypeError" class="error-message"></span>
+            
+            <label>5. Rent or Own? (JS Validated - Selection Required):</label>
+            <input type="radio" id="own" name="status" value="own">
+            <label for="own" style="display:inline; margin-right: 20px;">Own</label>
+            <input type="radio" id="rent" name="status" value="rent">
+            <label for="rent" style="display:inline;">Rent</label>
+            <span id="statusError" class="error-message"></span>
+            
+            <label for="agreement" style="margin-top: 25px;">6. I agree to a home visit (JS Validated):</label>
+            <input type="checkbox" id="agreement" name="agreement" value="yes" style="margin-left: 0;">
+            <span id="agreementError" class="error-message"></span>
+            
+            <label for="income">7. Estimated Monthly Income ($) (JS Validated - Min $1000):</label>
+            <input type="number" id="income" name="income">
+            <span id="incomeError" class="error-message"></span>
+
+            <label for="commitment">8. Why do you want to adopt? (JS Validated - Max 50 Words):</label>
+            <textarea id="commitment" name="commitment" rows="4"></textarea>
+            <span id="commitmentError" class="error-message"></span>
+
+        </fieldset>
+        
+        <fieldset style="margin-top: 30px;">
+            <legend>Additional Details (HTML5 Validation)</legend>
+
+            <label for="email">9. Email Address (HTML5 Validated):</label>
+            <input type="email" id="email" name="email" required placeholder="e.g., meow@catshelter.com">
+            
+            <label for="postalCode">10. Postal/Zip Code (HTML5 Validated - 6 digits):</label>
+            <input type="text" id="postalCode" name="postalCode" pattern="\d{6}" title="Must be exactly 6 digits (0-9)." required>
+            
+            <label for="website">11. Your Website/Social Media (HTML5 Validated):</label>
+            <input type="url" id="website" name="website" placeholder="e.g., https://facebook.com/mycats">
+            
+            <label for="time">12. Preferred Contact Time (HTML5 Validated):</label>
+            <input type="time" id="time" name="time" required>
+            
+            <label for="dateAvailable">13. Earliest Available Adoption Date (HTML5 Validated):</label>
+            <input type="date" id="dateAvailable" name="dateAvailable" required min="2025-01-01" max="2026-12-31">
+
+            <label for="foodBudget">14. Monthly Food Budget ($) (HTML5 Validated - Slider):</label>
+            <input type="range" id="foodBudget" name="foodBudget" min="10" max="100" step="5" value="50" oninput="budgetOutput.value = foodBudget.value">
+            <output name="budgetOutput" id="budgetOutput">50</output>
+            
+            <label for="color">15. Cat Color Preference (HTML5 Validated):</label>
+            <input type="color" id="color" name="color" value="#000000">
+
+        </fieldset>
+
+        <button type="submit">Submit Adoption Application</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+            
+            function setError(elementId, errorId, message) {
+                const element = document.getElementById(elementId);
+                const error = document.getElementById(errorId);
+                
+                if (message) {
+                    error.textContent = message;
+                    element.classList.add('error-field');
+                    isValid = false;
+                } else {
+                    error.textContent = '';
+                    element.classList.remove('error-field');
+                }
+            }
+
+            const fullName = document.getElementById('fullName').value.trim();
+            if (fullName.length < 3) {
+                setError('fullName', 'fullNameError', 'Full Name is required and must be at least 3 characters.');
+            } else {
+                setError('fullName', 'fullNameError', '');
+            }
+
+            const phone = document.getElementById('phone').value.trim();
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone)) {
+                setError('phone', 'phoneError', 'Phone number must be exactly 10 digits.');
+            } else {
+                setError('phone', 'phoneError', '');
+            }
+            
+            const petCount = document.getElementById('petCount').value.trim();
+            if (petCount === "" || parseInt(petCount) < 0 || isNaN(parseInt(petCount))) {
+                setError('petCount', 'petCountError', 'Please enter a valid number of current pets (0 or more).');
+            } else {
+                setError('petCount', 'petCountError', '');
+            }
+
+            const homeType = document.getElementById('homeType').value;
+            if (homeType === "") {
+                setError('homeType', 'homeTypeError', 'Please select a type of home.');
+            } else {
+                setError('homeType', 'homeTypeError', '');
+            }
+
+            const statusRadios = document.getElementsByName('status');
+            let statusSelected = false;
+            for (let i = 0; i < statusRadios.length; i++) {
+                if (statusRadios[i].checked) {
+                    statusSelected = true;
+                    break;
+                }
+            }
+            if (!statusSelected) {
+                document.getElementById('statusError').textContent = 'Please select Rent or Own.';
+                isValid = false;
+            } else {
+                document.getElementById('statusError').textContent = '';
+            }
+
+            const agreement = document.getElementById('agreement');
+            if (!agreement.checked) {
+                document.getElementById('agreementError').textContent = 'You must agree to the home visit.';
+                isValid = false;
+            } else {
+                document.getElementById('agreementError').textContent = '';
+            }
+            
+            const income = document.getElementById('income').value.trim();
+            if (income === "" || parseInt(income) < 1000 || isNaN(parseInt(income))) {
+                setError('income', 'incomeError', 'Monthly income must be at least $1000 to ensure financial stability.');
+            } else {
+                setError('income', 'incomeError', '');
+            }
+            
+            const commitment = document.getElementById('commitment').value.trim();
+            const wordCount = commitment.split(/\s+/).filter(word => word.length > 0).length;
+
+            if (wordCount > 50) {
+                setError('commitment', 'commitmentError', `Limit of 50 words exceeded. Current word count: ${wordCount}`);
+            } else if (wordCount === 0) {
+                 setError('commitment', 'commitmentError', 'Please provide a reason for adoption.');
+            }
+             else {
+                setError('commitment', 'commitmentError', '');
+            }
+
+            if(isValid) {
+                alert("Form submitted successfully! (Note: HTML5 elements will self-validate if their built-in requirements fail.)");
+            }
+            
+            return isValid;
+        }
+    </script>
+
+</body>
+</html>
